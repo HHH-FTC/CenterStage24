@@ -1,0 +1,53 @@
+package org.firstinspires.ftc.teamcode.opmodes.teleop
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
+import org.firstinspires.ftc.teamcode.robots.VitiTawitiQ2
+
+@TeleOp
+class QualTwoTeleOp : LinearOpMode() {
+    override fun runOpMode() {
+        val robot = VitiTawitiQ2(hardwareMap)
+        robot.claw.runTo2()
+
+        waitForStart()
+        while (opModeIsActive()) {
+            robot.teleOpIntake(gamepad1)
+            robot.teleOpHang(gamepad1)
+
+            if (gamepad1.right_trigger > 0) {
+                deposit(robot)
+            } else if (gamepad1.left_trigger > 0) {
+                robot.claw.runTo1()
+            } else if (gamepad1.dpad_right) {
+                robot.launch.runTo2()
+            } else if (gamepad1.dpad_left) {
+                robot.launch.runTo1()
+            }
+
+            telemetry.addData(
+                "Slide Current",
+                robot.slides.motor.dcMotorEx.getCurrent(CurrentUnit.AMPS)
+            )
+            telemetry.addData("Slide Position", robot.slides.motor.currentPosition)
+            telemetry.addData("Actuator Position", robot.hang.currentPosition)
+            telemetry.addData("Outtake Position", robot.hang.currentPosition)
+            telemetry.addData("Claw Position", robot.claw.position)
+            telemetry.addData("Positions:", robot.teleOpDrive(gamepad1))
+            telemetry.update()
+        }
+    }
+
+    fun deposit(robot: VitiTawitiQ2) {
+        robot.slides.setPower(1.0)
+        sleep(1000)
+        robot.slides.setPower(0.0)
+        robot.claw.runTo2()
+        sleep(1000)
+        robot.slides.setPower(-1.0)
+        sleep(1000)
+        robot.slides.setPower(0.0)
+    }
+
+}

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.Hardware.Mechanisms.LinearSlide
 import org.firstinspires.ftc.teamcode.Hardware.Mechanisms.ToggleServo
@@ -55,6 +56,7 @@ class VitiTawitiQ2(hwMap: HardwareMap) {
             hwMap.get(WebcamName::class.java, "Webcam 1"),
             tf,
             atag
+
         )
 
         this.drive.leftBack.direction = DcMotorSimple.Direction.REVERSE
@@ -85,5 +87,47 @@ class VitiTawitiQ2(hwMap: HardwareMap) {
             hang.setPower(1.0)
         else if (gp.dpad_down)
             hang.setPower(0.0)
+    }
+
+    fun telemetryTfod(telemetry: Telemetry) {
+        val currentRecognitions = tf.recognitions
+        telemetry.addData("# Objects Detected", currentRecognitions.size)
+
+        // Step through the list of recognitions and display info for each one.
+        for (recognition in currentRecognitions) {
+            val x = ((recognition.left + recognition.right) / 2).toDouble()
+            val y = ((recognition.top + recognition.bottom) / 2).toDouble()
+            telemetry.addData("Test", "Test")
+            telemetry.addData(
+                "Image",
+                "%s (%.0f %% Conf.)",
+                recognition.label,
+                recognition.confidence * 100
+            )
+            telemetry.addData("- Position", "%.0f / %.0f", x, y)
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.width, recognition.height)
+        } // end for() loop
+    } // end method telemetryTfod()
+
+    fun getRecPoints(): List<Vector2d> {
+        val recs = tf.recognitions
+        val points = mutableListOf<Vector2d>()
+        for (rec in recs) {
+            val x = ((rec.left + rec.right) / 2).toDouble()
+            val y = ((rec.top + rec.bottom) / 2).toDouble()
+
+            points.add(Vector2d(x, y))
+        }
+
+        return points
+    }
+
+    enum class PixelSpot {
+        LEFT,
+        MIDDLE,
+        RIGHT
+    }
+
+    fun pixelSpot() {
     }
 }
