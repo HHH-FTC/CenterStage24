@@ -18,25 +18,31 @@ import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 import org.firstinspires.ftc.vision.tfod.TfodProcessor
 
-class VitiTawitiQ2(hwMap: HardwareMap) : VitiTawiti {
+class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti {
     override val drive: MecanumDrive
     val intake: Motor
     val hang: Motor
-    val slides: LinearSlide
+    val slides1: LinearSlide
+    val slides2: LinearSlide //each slide is powered separately now
     val claw: ToggleServo
-    val lynx: List<LynxModule>
+    val lynx: List<LynxModule> //control hub + expansion hub
     val camera: VisionPortal
     val tf: TfodProcessor
     val atag: AprilTagProcessor
     val launch: ToggleServo
+    //TODO: implement Ori's linear servos for locking
 
     init {
         drive = MecanumDrive(hwMap, Pose2d(0.0, 0.0, 0.0))
 
-        val slideM = Motor("slides", hwMap)
-        slideM.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
+        val slide1M = Motor("slides", hwMap)
+        slide1M.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
+        val slide2M = Motor("slides2", hwMap)
+        slide2M.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
+        slide2M.setDirectionReverse()
 
-        slides = LinearSlide(slideM, 0.0, 500.0, 250.0)
+        slides1 = LinearSlide(slide1M, 0.0, 500.0, 250.0)
+        slides2 = LinearSlide(slide2M, 0.0, 500.0, 250.0)
 
         hang = Motor("outtake", hwMap)
         hang.setDirectionReverse()
@@ -87,5 +93,47 @@ class VitiTawitiQ2(hwMap: HardwareMap) : VitiTawiti {
             hang.setPower(1.0)
         else if (gp.dpad_down)
             hang.setPower(0.0)
+    }
+
+    fun telemetryTfod(telemetry: Telemetry) {
+        val currentRecognitions = tf.recognitions
+        telemetry.addData("# Objects Detected", currentRecognitions.size)
+
+        // Step through the list of recognitions and display info for each one.
+        for (recognition in currentRecognitions) {
+            val x = ((recognition.left + recognition.right) / 2).toDouble()
+            val y = ((recognition.top + recognition.bottom) / 2).toDouble()
+            telemetry.addData("Test", "Test")
+            telemetry.addData(
+                "Image",
+                "%s (%.0f %% Conf.)",
+                recognition.label,
+                recognition.confidence * 100
+            )
+            telemetry.addData("- Position", "%.0f / %.0f", x, y)
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.width, recognition.height)
+        } // end for() loop
+    } // end method telemetryTfod()
+
+    fun getRecPoints(): List<Vector2d> {
+        val recs = tf.recognitions
+        val points = mutableListOf<Vector2d>()
+        for (rec in recs) {
+            val x = ((rec.left + rec.right) / 2).toDouble()
+            val y = ((rec.top + rec.bottom) / 2).toDouble()
+
+            points.add(Vector2d(x, y))
+        }
+
+        return points
+    }
+
+    enum class PixelSpot {
+        LEFT,
+        MIDDLE,
+        RIGHT
+    }
+
+    fun pixelSpot() {
     }
 }
