@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.robots
 
 import com.acmerobotics.roadrunner.Pose2d
-import com.acmerobotics.roadrunner.PoseVelocity2d
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.hardware.lynx.LynxModule
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
@@ -18,10 +17,9 @@ import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 import org.firstinspires.ftc.vision.tfod.TfodProcessor
 
-class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti {
+class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti() {
     override val drive: MecanumDrive
     val intake: Motor
-    val hang: Motor
     val slides1: LinearSlide
     val slides2: LinearSlide //each slide is powered separately now
     val claw: ToggleServo
@@ -44,9 +42,6 @@ class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti {
         slides1 = LinearSlide(slide1M, 0.0, 500.0, 250.0)
         slides2 = LinearSlide(slide2M, 0.0, 500.0, 250.0)
 
-        hang = Motor("outtake", hwMap)
-        hang.setDirectionReverse()
-
         intake = Motor("intake", hwMap)
         intake.setDirectionReverse()
 
@@ -65,20 +60,10 @@ class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti {
 
         )
 
-        this.drive.leftBack.direction = DcMotorSimple.Direction.REVERSE
+        this.drive.backLeft.direction = DcMotorSimple.Direction.REVERSE
     }
 
-    fun teleOpDrive(gamepad: Gamepad): PoseVelocity2d {
-        val loc = PoseVelocity2d(
-            Vector2d(
-                gamepad.left_stick_y.toDouble(),
-                gamepad.left_stick_x.toDouble()
-            ),
-            gamepad.right_stick_x.toDouble()
-        )
-        drive.setDrivePowers(loc)
-        return loc
-    }
+
 
     fun teleOpIntake(gp: Gamepad) {
         if (gp.a) {
@@ -86,13 +71,6 @@ class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti {
         } else if (gp.b) {
             intake.setPower(0.0)
         }
-    }
-
-    fun teleOpHang(gp: Gamepad) {
-        if (gp.dpad_up)
-            hang.setPower(1.0)
-        else if (gp.dpad_down)
-            hang.setPower(0.0)
     }
 
     fun telemetryTfod(telemetry: Telemetry) {

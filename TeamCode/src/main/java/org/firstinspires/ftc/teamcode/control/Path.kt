@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode.control
 
 class Path {
-    private var actions: MutableList<MoveRobot.Actions>
+    private var actions: MutableList<MoveRobot.RachelActions>
 
     constructor() {
         actions = ArrayList()
     }
 
-    constructor(actions: MutableList<MoveRobot.Actions>) {
+    constructor(actions: MutableList<MoveRobot.RachelActions>) {
         this.actions = actions
     }
 
-    fun add(newAction: MoveRobot.Actions, location: Int) {
+    fun add(newAction: MoveRobot.RachelActions, location: Int) {
         val tempArray = actions
         actions[location] = newAction
         for (i in location + 1 until tempArray.size) {
@@ -20,7 +20,7 @@ class Path {
         actions.add(tempArray[tempArray.size - 1])
     }
 
-    fun add(newAction: MoveRobot.Actions): Path {
+    fun add(newAction: MoveRobot.RachelActions): Path {
         add(newAction, actions.size)
         return this
     }

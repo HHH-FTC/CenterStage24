@@ -14,7 +14,6 @@ class QualTwoTeleOp : LinearOpMode() {
         waitForStart()
         while (opModeIsActive()) {
             robot.teleOpIntake(gamepad1)
-            robot.teleOpHang(gamepad1)
 
             if (gamepad1.right_trigger > 0) {
                 deposit(robot)
@@ -31,8 +30,6 @@ class QualTwoTeleOp : LinearOpMode() {
                 robot.slides.motor.dcMotorEx.getCurrent(CurrentUnit.AMPS)
             )
             telemetry.addData("Slide Position", robot.slides.motor.currentPosition)
-            telemetry.addData("Actuator Position", robot.hang.currentPosition)
-            telemetry.addData("Outtake Position", robot.hang.currentPosition)
             telemetry.addData("Claw Position", robot.claw.position)
             telemetry.addData("Positions:", robot.teleOpDrive(gamepad1))
             telemetry.update()

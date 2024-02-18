@@ -1,29 +1,26 @@
 package org.firstinspires.ftc.teamcode.opmodes.auton
 
-import com.acmerobotics.roadrunner.Pose2d
+import com.acmerobotics.roadrunner.Vector2d
+import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.control.MoveRobot
-import org.firstinspires.ftc.teamcode.control.Path
-import org.firstinspires.ftc.teamcode.robots.VitiTawitiLIC
+import org.firstinspires.ftc.teamcode.robots.VitiTawitiQ2
 
 @Autonomous
-class SquarePath : LinearOpMode() {
-
+internal class SquarePath : LinearOpMode() {
     override fun runOpMode() {
-        val robot = VitiTawitiLIC(hardwareMap)
-        val controller = MoveRobot(robot)
-        val path = Path(
-            mutableListOf(
-                controller.Forward(24),
-                controller.StrafeRight(24),
-                controller.Backward(24),
-                controller.StrafeLeft(24)
-            )
-        )
+        val robot = VitiTawitiQ2(hardwareMap)
+
+        val traj = robot.drive.actionBuilder(robot.drive.pose)
+            .setTangent(0.0)
+            .strafeTo(Vector2d(0.0, 24.0))
+            .strafeTo(Vector2d(24.0, 0.0))
+            .strafeTo(Vector2d(0.0, -24.0))
+            .strafeTo(Vector2d(-24.0, 0.0))
+            .build()
 
         waitForStart()
 
-        path.go()
+        runBlocking(traj) //TOP LEVEL FUNCTION OF ACTIONS.KT
     }
 }

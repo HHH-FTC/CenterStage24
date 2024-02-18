@@ -14,21 +14,21 @@ public class MoveRobot {
 
     public MoveRobot(VitiTawiti robot) {
         this.robot = robot;
-        fLeft = robot.getDrive().leftFront;
-        fRight = robot.getDrive().rightFront;
-        bLeft = robot.getDrive().leftBack;
-        bRight = robot.getDrive().rightBack;
+        fLeft = robot.getDrive().frontLeft;
+        fRight = robot.getDrive().frontRight;
+        bLeft = robot.getDrive().backLeft;
+        bRight = robot.getDrive().backRight;
     }
 
-    public void addPath(ArrayList<Actions> actions) {
+    public void addPath(ArrayList<RachelActions> actions) {
         paths.add(new Path(actions));
     }
 
-    public void addToPath(int pathId, Actions action, int location) {
+    public void addToPath(int pathId, RachelActions action, int location) {
         paths.get(pathId).add(action,location);
     }
 
-    public void addToPath(int pathId, Actions action) {
+    public void addToPath(int pathId, RachelActions action) {
         paths.get(pathId).add(action);
     }
 
@@ -171,11 +171,11 @@ public class MoveRobot {
 
     }
 
-    public interface Actions {
+    public interface RachelActions {
         void run();
     }
 
-    public class Forward implements Actions {
+    public class Forward implements RachelActions {
         private int amount;
         public Forward() {amount = 1;}
         public Forward(int amount) {this.amount = amount;}
@@ -185,7 +185,7 @@ public class MoveRobot {
         }
     }
 
-    public class Backward implements Actions {
+    public class Backward implements RachelActions {
         private int amount;
         public Backward() {amount = 1;}
         public Backward(int amount) {this.amount = amount;}
@@ -195,7 +195,7 @@ public class MoveRobot {
         }
     }
 
-    public class StrafeLeft implements Actions {
+    public class StrafeLeft implements RachelActions {
         private int amount;
         public StrafeLeft() {amount = 1;}
         public StrafeLeft(int amount) {this.amount = amount;}
@@ -205,7 +205,7 @@ public class MoveRobot {
         }
     }
 
-    public class StrafeRight implements Actions {
+    public class StrafeRight implements RachelActions {
         private int amount;
         public StrafeRight() {amount = 1;}
         public StrafeRight(int amount) {this.amount = amount;}
@@ -215,7 +215,7 @@ public class MoveRobot {
         }
     }
 
-    public class RotateCW implements Actions {
+    public class RotateCW implements RachelActions {
         private final int amount;
         public RotateCW() {amount = 1;}
         public RotateCW(int amount) {this.amount = amount;}
@@ -225,7 +225,7 @@ public class MoveRobot {
         }
     }
 
-    public class RotateCCW implements Actions {
+    public class RotateCCW implements RachelActions {
         private final int amount;
         public RotateCCW() {amount = 1;}
         public RotateCCW(int amount) {this.amount = amount;}
