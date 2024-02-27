@@ -45,7 +45,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.Localizer;
+import org.firstinspires.ftc.teamcode.resources.Localizer;
 import org.firstinspires.ftc.teamcode.resources.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.resources.messages.PoseMessage;
 import org.firstinspires.ftc.teamcode.resources.messages.TankCommandMessage;

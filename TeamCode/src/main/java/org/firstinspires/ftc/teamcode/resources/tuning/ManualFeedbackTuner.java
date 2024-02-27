@@ -5,10 +5,10 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
-import org.firstinspires.ftc.teamcode.TwoDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.resources.MecanumDrive;
 import org.firstinspires.ftc.teamcode.resources.TankDrive;
+import org.firstinspires.ftc.teamcode.resources.ThreeDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.resources.TwoDeadWheelLocalizer;
 
 @TeleOp
 public final class ManualFeedbackTuner extends LinearOpMode {

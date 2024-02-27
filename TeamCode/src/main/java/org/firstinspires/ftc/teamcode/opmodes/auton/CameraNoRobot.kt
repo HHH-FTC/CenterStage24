@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode.opmodes.auton
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.robots.VitiTawitiQ2
+import org.firstinspires.ftc.teamcode.robots.VitiTawitiLIC
 
 @Autonomous(name = "White Pixel Test")
 class CameraNoRobot : LinearOpMode() {
     override fun runOpMode() {
-        val robot = VitiTawitiQ2(hardwareMap)
+        val robot = VitiTawitiLIC(hardwareMap)
         waitForStart()
         robot.camera.resumeStreaming()
         while (opModeIsActive()) {
