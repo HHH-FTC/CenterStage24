@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.robots
 import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.hardware.lynx.LynxModule
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.external.Telemetry
@@ -20,27 +20,24 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor
 class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti() {
     override val drive: MecanumDrive
     val intake: Motor
-    val slides1: LinearSlide
-    val slides2: LinearSlide //each slide is powered separately now
+    val slides: LinearSlide
     val claw: ToggleServo
     val lynx: List<LynxModule> //control hub + expansion hub
     val camera: VisionPortal
     val tf: TfodProcessor
     val atag: AprilTagProcessor
     val launch: ToggleServo
-    //TODO: implement Ori's linear servos for locking
 
     init {
         drive = MecanumDrive(hwMap, Pose2d(0.0, 0.0, 0.0))
 
         val slide1M = Motor("slides", hwMap)
         slide1M.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
+        slide1M.setDirectionReverse()
         val slide2M = Motor("slides2", hwMap)
         slide2M.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
-        slide2M.setDirectionReverse()
 
-        slides1 = LinearSlide(slide1M, 0.0, 500.0, 250.0)
-        slides2 = LinearSlide(slide2M, 0.0, 500.0, 250.0)
+        slides = LinearSlide(slide1M, slide2M)
 
         intake = Motor("intake", hwMap)
         intake.setDirectionReverse()
@@ -48,8 +45,8 @@ class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti() {
 
         lynx = hwMap.getAll(LynxModule::class.java)
 
-        launch = ToggleServo(hwMap, 0.0, .6, "claw")
-        claw = ToggleServo(hwMap, 0.0, .5, "launch")
+        launch = ToggleServo(hwMap, 0.0, 1.0, "launch")
+        claw = ToggleServo(hwMap, 1.0, .5, "claw")
 
         tf = TfodProcessor.easyCreateWithDefaults()
         atag = AprilTagProcessor.easyCreateWithDefaults()
@@ -59,11 +56,7 @@ class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti() {
             atag
 
         )
-
-        this.drive.backLeft.direction = DcMotorSimple.Direction.REVERSE
     }
-
-
 
     fun teleOpIntake(gp: Gamepad) {
         if (gp.a) {
@@ -113,5 +106,16 @@ class VitiTawitiLIC(hwMap: HardwareMap) : VitiTawiti() {
     }
 
     fun pixelSpot() {
+    }
+
+    fun deposit(opmode: LinearOpMode)  {
+        this.slides.setPower(1.0)
+        opmode.sleep(1000)
+        this.slides.setPower(0.0)
+        this.claw.runTo1()
+        opmode.sleep(1000)
+        this.slides.setPower(-1.0)
+        opmode.sleep(1000)
+        this.slides.setPower(0.0)
     }
 }

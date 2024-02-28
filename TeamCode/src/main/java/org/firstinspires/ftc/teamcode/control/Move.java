@@ -17,10 +17,10 @@ public class Move {
     public Move(VitiTawitiQ2 robot, HardwareMap hardwareMap) {
         this.robot = robot;
         this.hardwareMap = hardwareMap;
-        fLeft = robot.getDrive().leftFront;
-        fRight = robot.getDrive().rightFront;
-        bLeft = robot.getDrive().leftBack;
-        bRight = robot.getDrive().rightBack;
+        fLeft = robot.getDrive().frontLeft;
+        fRight = robot.getDrive().frontRight;
+        bLeft = robot.getDrive().backLeft;
+        bRight = robot.getDrive().backRight;
     }
 
     public void strafeLeft(int amount) {

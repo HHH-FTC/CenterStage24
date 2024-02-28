@@ -4,4 +4,5 @@ enum class SpikeMark {
     LEFT,
     MIDDLE,
     RIGHT,
+    UNFOUND,
 }

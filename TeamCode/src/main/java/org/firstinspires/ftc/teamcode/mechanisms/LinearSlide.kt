@@ -2,30 +2,25 @@ package org.firstinspires.ftc.teamcode.Hardware.Mechanisms
 
 import org.firstinspires.ftc.teamcode.mechanisms.Motor
 
-class LinearSlide (
-    val motor: Motor,
-    var zero: Double,
-    var target: Double,
-    var increment: Double
-) {
-    var advance = 0
-    fun goToZero() {
-        motor.runToPosition(zero)
-    }
+class LinearSlide(left: Motor, right: Motor) {
+    val left: Motor
+    val right: Motor
 
-    fun goToOne() {
-        motor.runToPosition(target + increment * advance)
-    }
-
-    fun advance() {
-        advance += 1
-    }
-
-    fun unadvance() {
-        advance -= 1
+    init {
+        this.left = left
+        this.right = right
     }
 
     fun setPower(power: Double) {
-        motor.setPower(power);
+        left.setPower(power)
+        right.setPower(power)
+    }
+
+    fun on() {
+        setPower(1.0)
+    }
+
+    fun off() {
+        setPower(0.0)
     }
 }
